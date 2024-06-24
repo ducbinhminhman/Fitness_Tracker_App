@@ -1,0 +1,8 @@
+# Ignore BigQuery credential files
+*.json
+
+# Ignore environment variable files
+.env
+
+# Ignore Python byte-code directories
+__pycache__/
