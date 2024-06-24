@@ -2,10 +2,15 @@ import streamlit as st
 import pandas as pd
 import re
 import os
+from dotenv import load_dotenv
 
-from config import get_bigquery_client, exercise_defaults, flat_exercise_defaults
-from ui import display_home, display_log_workout, display_view_progress, display_log_measurement
+# Assuming these imports are correct as per your project structure
+from config import exercise_defaults, flat_exercise_defaults, get_bigquery_client
 from data import upload_to_bigquery
+from ui import display_home, display_log_workout, display_log_measurement, display_view_progress
+
+# Load environment variables
+load_dotenv()
 
 # Initialize session state
 if 'workout_data' not in st.session_state:
@@ -30,8 +35,7 @@ def login():
                 'user_email': user_email,
                 'sanitized_email': sanitized_email
             }
-            st.success("Login successful!")
-            st.experimental_rerun()  # Trigger rerun to refresh the app with navigation
+            st.experimental_rerun()  # Use experimental_rerun to reload the page and update the session state
 
 # Title and Description
 st.title("Fitness Tracker App")
@@ -57,7 +61,7 @@ else:
 
     # Upload to BigQuery
     if st.sidebar.button("Upload to BigQuery"):
-        client = get_bigquery_client("C:/Users/mandu/Desktop/Privat_key/bubbly-trail-400312-281c05bdd2e4.json")
+        client = get_bigquery_client()
         user_name = st.session_state.user_info['user_name']
         sanitized_email = st.session_state.user_info['sanitized_email']
         

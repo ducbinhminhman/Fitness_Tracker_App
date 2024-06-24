@@ -1,10 +1,7 @@
 from google.cloud import bigquery
 import os
 import pandas as pd
-
-def get_bigquery_client(credential_path):
-    client = bigquery.Client.from_service_account_json(credential_path)
-    return client
+from config import get_bigquery_client
 
 def save_to_csv(rows, filename):
     df = pd.DataFrame(rows)

@@ -6,6 +6,11 @@ import pandas as pd
 from config import exercise_defaults, flat_exercise_defaults, get_bigquery_client
 from data import save_to_csv, upload_to_bigquery
 
+from dotenv import load_dotenv
+from config import get_bigquery_client
+# Load environment variables
+load_dotenv()
+
 def display_home():
     st.header("Welcome to the Fitness Tracker App")
     st.write("Use this app to log your workouts and track your progress over time.")
@@ -95,7 +100,7 @@ def display_view_progress():
     st.header("View Your Progress")
     
     # Load data from BigQuery
-    client = get_bigquery_client("C:/Users/mandu/Desktop/Privat_key/bubbly-trail-400312-281c05bdd2e4.json")
+    client = get_bigquery_client()
     user_info = st.session_state.user_info
     user_name = user_info['user_name']
     sanitized_email = user_info['sanitized_email']

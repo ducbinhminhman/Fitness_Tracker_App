@@ -5,9 +5,9 @@ from google.oauth2 import service_account
 import json
 from google.cloud import bigquery
 
-def get_bigquery_client(credentials_path):
-    credentials = json.load(open(credentials_path))
-    client = bigquery.Client.from_service_account_info(credentials)
+def get_bigquery_client():
+    credential_path = os.getenv('BIGQUERY_CREDENTIALS')
+    client = bigquery.Client.from_service_account_json(credential_path)
     return client
 
 
