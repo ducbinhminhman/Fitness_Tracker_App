@@ -14,7 +14,7 @@ load_dotenv()
 def display_home():
     st.header("Welcome to the Fitness Tracker App")
     st.write("Use this app to log your workouts and track your progress over time.")
-
+    st.image("images/pilate.webp", use_column_width=True)
 def display_log_workout():
     st.header("Log a Workout")
     

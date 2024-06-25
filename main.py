@@ -23,6 +23,11 @@ if 'user_info' not in st.session_state:
     st.session_state.user_info = {}
 
 def login():
+    # Title and Description
+    st.title("Fitness Tracker App")
+    st.write("Track your workout history, weight, body measurements, and other fitness metrics over time.")
+    # Display the image
+    st.image("images/running.webp", use_column_width=True)
     st.header("Login")
     user_name = st.text_input("Username")
     user_email = st.text_input("Email")
@@ -37,9 +42,6 @@ def login():
             }
             st.experimental_rerun()  # Use experimental_rerun to reload the page and update the session state
 
-# Title and Description
-st.title("Fitness Tracker App")
-st.write("Track your workout history, weight, body measurements, and other fitness metrics over time.")
 
 # Login Section
 if 'user_name' not in st.session_state.user_info:
