@@ -102,11 +102,11 @@ def display_view_progress():
     # Load data from BigQuery
     client = get_bigquery_client()
     user_info = st.session_state.user_info
-    user_name = user_info['user_name']
+    #user_name = user_info['user_name']
     sanitized_email = user_info['sanitized_email']
     
     workout_query = f"""
-    SELECT * FROM `bubbly-trail-400312.fitness_logs.{user_name}_{sanitized_email}_workout`
+    SELECT * FROM `bubbly-trail-400312.fitness_logs.{sanitized_email}_workout`
     ORDER BY Date DESC
     """
     workout_data = client.query(workout_query).to_dataframe()
@@ -115,7 +115,7 @@ def display_view_progress():
     st.write(workout_data)
     
     measurement_query = f"""
-    SELECT * FROM `bubbly-trail-400312.fitness_logs.{user_name}_{sanitized_email}_bodymeasurements`
+    SELECT * FROM `bubbly-trail-400312.fitness_logs.{sanitized_email}_bodymeasurements`
     ORDER BY Date DESC
     """
     measurement_data = client.query(measurement_query).to_dataframe()

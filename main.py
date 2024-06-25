@@ -29,14 +29,14 @@ def login():
     # Display the image
     st.image("images/running.webp", use_column_width=True)
     st.header("Login")
-    user_name = st.text_input("Username")
+    #user_name = st.text_input("Username")
     user_email = st.text_input("Email")
 
     if st.button("Login"):
-        if user_name and user_email:
+        if user_email: #user_name and user_email:
             sanitized_email = re.sub(r'[^a-z0-9]', '_', user_email.lower())
             st.session_state.user_info = {
-                'user_name': user_name,
+                #'user_name': user_name,
                 'user_email': user_email,
                 'sanitized_email': sanitized_email
             }
@@ -44,7 +44,7 @@ def login():
 
 
 # Login Section
-if 'user_name' not in st.session_state.user_info:
+if 'user_email' not in st.session_state.user_info:
     login()
 else:
     # Sidebar for navigation
@@ -64,12 +64,13 @@ else:
     # Upload to BigQuery
     if st.sidebar.button("Upload to BigQuery"):
         client = get_bigquery_client()
-        user_name = st.session_state.user_info['user_name']
+        #user_name = st.session_state.user_info['user_name']
         sanitized_email = st.session_state.user_info['sanitized_email']
         
         workout_csv_file = 'workout_log.csv'
         if os.path.exists(workout_csv_file):
-            workout_table_id = f"{user_name}_{sanitized_email}_workout"
+            #workout_table_id = f"{user_name}_{sanitized_email}_workout"
+            workout_table_id = f"{sanitized_email}_workout"
             upload_to_bigquery(client, workout_table_id, workout_csv_file)
             st.success("Workout data uploaded to BigQuery successfully!")
         else:
@@ -77,7 +78,8 @@ else:
         
         measurement_csv_file = 'body_measurements_log.csv'
         if os.path.exists(measurement_csv_file):
-            measurement_table_id = f"{user_name}_{sanitized_email}_bodymeasurements"
+            #measurement_table_id = f"{user_name}_{sanitized_email}_bodymeasurements"
+            measurement_table_id = f"{sanitized_email}_bodymeasurements"
             upload_to_bigquery(client, measurement_table_id, measurement_csv_file)
             st.success("Body measurements data uploaded to BigQuery successfully!")
         else:
