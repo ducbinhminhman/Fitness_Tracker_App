@@ -6,3 +6,6 @@
 
 # Ignore Python byte-code directories
 __pycache__/
+
+# Ignore Streamlit secrets file
+secrets.toml

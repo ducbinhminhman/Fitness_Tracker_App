@@ -1,13 +1,17 @@
-import os
 from google.cloud import bigquery
 from google.oauth2 import service_account
-
-import json
 from google.cloud import bigquery
+import toml
+import os
+import streamlit as st
 
 def get_bigquery_client():
-    credential_path = os.getenv('BIGQUERY_CREDENTIALS')
-    client = bigquery.Client.from_service_account_json(credential_path)
+    # Load environment variables from a .env file
+
+    credentials_dict = st.secrets["credentials"]
+
+    # Create a BigQuery client using the decoded JSON credentials
+    client = bigquery.Client.from_service_account_info(credentials_dict)
     return client
 
 
