@@ -1,8 +1,17 @@
+import os
 from google.cloud import bigquery
 from google.oauth2 import service_account
+import base64
+
+import json
 from google.cloud import bigquery
 import toml
+
+
 import os
+import toml
+from google.cloud import bigquery
+from dotenv import load_dotenv
 import streamlit as st
 
 def get_bigquery_client():
@@ -57,3 +66,17 @@ exercise_defaults = {
 
 # Flatten the exercise_defaults to easily map exercises to their defaults
 flat_exercise_defaults = {exercise: values for group in exercise_defaults.values() for exercise, values in group.items()}
+
+# Add this dictionary to the config file
+cardio_exercises = {
+    "Running/Jogging": "Time (minutes)",
+    "Cycling": "Time (minutes)",
+    "Walking": "Time (minutes)",
+    "Swimming": "Time (minutes)",
+    "Rowing": "Time (minutes)",
+    "Elliptical Trainer": "Time (minutes)",
+    "Stair Climbing": "Time (minutes)",
+    "High-Intensity Interval Training (HIIT)": "Time (minutes)",
+    "Jump Rope": "Time (minutes)",
+    "Dancing (e.g., Zumba)": "Time (minutes)"
+}

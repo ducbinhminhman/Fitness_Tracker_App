@@ -1,3 +1,4 @@
+# data.py
 from google.cloud import bigquery
 import os
 import pandas as pd
@@ -20,6 +21,16 @@ def upload_to_bigquery(client, table_id, csv_file):
                 bigquery.SchemaField("Chest", "FLOAT"),
                 bigquery.SchemaField("Waist", "FLOAT"),
                 bigquery.SchemaField("Hips", "FLOAT"),
+            ],
+            source_format=bigquery.SourceFormat.CSV,
+            skip_leading_rows=1,
+        )
+    elif 'cardio' in table_id:
+        job_config = bigquery.LoadJobConfig(
+            schema=[
+                bigquery.SchemaField("Date", "DATE"),
+                bigquery.SchemaField("Exercise", "STRING"),
+                bigquery.SchemaField("Time", "FLOAT"),
             ],
             source_format=bigquery.SourceFormat.CSV,
             skip_leading_rows=1,

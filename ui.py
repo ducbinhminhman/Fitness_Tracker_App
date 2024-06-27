@@ -7,14 +7,17 @@ from config import exercise_defaults, flat_exercise_defaults, get_bigquery_clien
 from data import save_to_csv, upload_to_bigquery
 
 from dotenv import load_dotenv
-from config import get_bigquery_client
+from config import get_bigquery_client, cardio_exercises
 # Load environment variables
 load_dotenv()
+
+# ui.py
 
 def display_home():
     st.header("Welcome to the Fitness Tracker App")
     st.write("Use this app to log your workouts and track your progress over time.")
     st.image("images/pilate.webp", use_column_width=True)
+
 def display_log_workout():
     st.header("Log a Workout")
     
@@ -102,7 +105,6 @@ def display_view_progress():
     # Load data from BigQuery
     client = get_bigquery_client()
     user_info = st.session_state.user_info
-    #user_name = user_info['user_name']
     sanitized_email = user_info['sanitized_email']
     
     workout_query = f"""
@@ -122,3 +124,38 @@ def display_view_progress():
     
     st.subheader("Body Measurements")
     st.write(measurement_data)
+    
+    cardio_query = f"""
+    SELECT * FROM `bubbly-trail-400312.fitness_logs.{sanitized_email}_cardio`
+    ORDER BY Date DESC
+    """
+    cardio_data = client.query(cardio_query).to_dataframe()
+    
+    st.subheader("Cardio History")
+    st.write(cardio_data)
+
+def display_log_cardio():
+    st.header("Log Cardio")
+
+    # Date input
+    date = st.date_input("Date", datetime.date.today())
+
+    # Select cardio exercise
+    exercise = st.selectbox("Cardio Exercise", list(cardio_exercises.keys()))
+
+    # Input field for time in minutes
+    time = st.number_input("Time (minutes)", min_value=1, help="Enter the duration of the cardio exercise in minutes")
+
+    # Submit button
+    if st.button("Log Cardio"):
+        new_data = {
+            'Date': date.strftime('%Y-%m-%d'),  # Ensure date is formatted as YYYY-MM-DD
+            'Exercise': exercise,
+            'Time': time  # Log the time for the cardio exercise
+        }
+        st.session_state.workout_data = pd.concat([st.session_state.workout_data, pd.DataFrame([new_data])], ignore_index=True)
+
+        # Save the new rows to a CSV file
+        save_to_csv([new_data], 'cardio_log.csv')
+
+        st.success("Cardio logged successfully!")
