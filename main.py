@@ -1,3 +1,5 @@
+# main.py
+
 import streamlit as st
 import pandas as pd
 import re
@@ -5,9 +7,9 @@ import os
 from dotenv import load_dotenv
 
 # Assuming these imports are correct as per your project structure
-from config import exercise_defaults, flat_exercise_defaults, get_bigquery_client
+from config import exercise_defaults, flat_exercise_defaults, cardio_exercises, get_bigquery_client
 from data import upload_to_bigquery
-from ui import display_home, display_log_workout, display_log_measurement, display_view_progress
+from ui import display_home, display_log_workout, display_log_measurement, display_view_progress, display_log_cardio
 
 # Load environment variables
 load_dotenv()
@@ -49,7 +51,7 @@ if 'user_email' not in st.session_state.user_info:
 else:
     # Sidebar for navigation
     st.sidebar.title("Navigation")
-    option = st.sidebar.selectbox("Choose a section", ["Home", "Log Workout", "Log Measurement", "View Progress"])
+    option = st.sidebar.selectbox("Choose a section", ["Home", "Log Workout", "Log Measurement", "Log Cardio", "View Progress"])
 
     # Navigation logic
     if option == "Home":
@@ -58,6 +60,8 @@ else:
         display_log_workout()
     elif option == "Log Measurement":
         display_log_measurement()
+    elif option == "Log Cardio":
+        display_log_cardio()
     elif option == "View Progress":
         display_view_progress()
 
@@ -84,3 +88,14 @@ else:
             st.success("Body measurements data uploaded to BigQuery successfully!")
         else:
             st.error("No body measurements data available to upload.")
+        
+        cardio_csv_file = 'cardio_log.csv'
+        if os.path.exists(cardio_csv_file):
+            cardio_table_id = f"{sanitized_email}_cardio"
+            upload_to_bigquery(client, cardio_table_id, cardio_csv_file)
+            st.success("Cardio data uploaded to BigQuery successfully!")
+        else:
+            st.error("No cardio data available to upload.")
+
+
+
